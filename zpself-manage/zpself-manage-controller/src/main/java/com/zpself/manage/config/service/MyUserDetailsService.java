@@ -26,7 +26,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         //roleService.getRoles(login.getId()).forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getName())));
-
+        authorities.add(new SimpleGrantedAuthority("/hi2"));
         return new org.springframework.security.core.userdetails.User(
                 username, null/*login.getPassword()*/,
                 true,//是否可用

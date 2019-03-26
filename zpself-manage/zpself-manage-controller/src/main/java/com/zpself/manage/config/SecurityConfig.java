@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
@@ -28,11 +29,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().maximumSessions(1).expiredUrl("/expired")
                 .and()
                 .and().exceptionHandling().accessDeniedPage("/accessDenied");*/
-        http.authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .csrf().disable();
+
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http
+                .authorizeRequests();
+        //for (String url : dxApiGateWateProperties.getUrls().getNoAuth()) {
+        registry.antMatchers("/hi").permitAll();//url过滤掉权限的路径
+        //registry.antMatchers("/login").permitAll();//url过滤掉权限的路径
+        // }
+        registry.anyRequest()
+                .access("@PermissionService.hasPermission(request,authentication)");
     }
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {

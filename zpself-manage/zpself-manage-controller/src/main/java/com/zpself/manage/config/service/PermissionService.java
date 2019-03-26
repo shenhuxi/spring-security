@@ -12,7 +12,7 @@ import org.springframework.util.AntPathMatcher;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 
-@Service("permissionService")
+@Service("PermissionService")
 public class PermissionService {
 
 	private static Logger logger = LoggerFactory.getLogger(PermissionService.class);
